@@ -34,14 +34,14 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@<COMMIT_SHA>
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to Container Registry
         if: secrets.DOCKER_USERNAME != ''
-        uses: docker/login-action@<COMMIT_SHA>
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -49,20 +49,20 @@ jobs:
 
       - name: Login to Docker Hub
         if: secrets.DOCKER_USERNAME != '' && startsWith(inputs.image-name, 'docker.io/')
-        uses: docker/login-action@<COMMIT_SHA>
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@<COMMIT_SHA>
+        uses: docker/metadata-action@v4
         with:
           images: ${{ inputs.image-name }}
           tags: ${{ inputs.tags }}
 
       - name: Build and push
-        uses: docker/build-push-action@<COMMIT_SHA>
+        uses: docker/build-push-action@v4
         with:
           context: ${{ inputs.context }}
           file: ${{ inputs.dockerfile }}

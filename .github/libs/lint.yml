@@ -21,7 +21,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@<COMMIT_SHA>
+    - uses: actions/checkout@v4
 
     - name: Setup Python
       if: inputs.cache-key != ''

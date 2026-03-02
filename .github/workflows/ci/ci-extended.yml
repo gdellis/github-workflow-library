@@ -25,10 +25,10 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install ${{ inputs.python-version }}
@@ -43,10 +43,10 @@ jobs:
     name: Typecheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install ${{ inputs.python-version }}
@@ -61,10 +61,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install ${{ inputs.python-version }}
@@ -76,7 +76,7 @@ jobs:
         run: ${{ inputs.test-command }}
 
       - name: Upload coverage
-        uses: codecov/codecov-action@<COMMIT_SHA>
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           fail_ci_if_error: false

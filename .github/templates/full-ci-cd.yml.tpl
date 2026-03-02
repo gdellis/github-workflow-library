@@ -11,10 +11,10 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install 3.13
@@ -29,10 +29,10 @@ jobs:
     name: Typecheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install 3.13
@@ -47,10 +47,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install 3.13
@@ -65,10 +65,10 @@ jobs:
     name: Security
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Set up Python
         run: uv python install 3.13

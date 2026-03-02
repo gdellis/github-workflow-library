@@ -13,14 +13,14 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
         with:
           sparse-checkout: |
              .github/.pr-labels.yaml
           sparse-checkout-cone-mode: false
 
       - name: Label PR
-        uses: actions/labeler@<COMMIT_SHA>
+        uses: actions/labeler@v4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/.pr-labels.yaml

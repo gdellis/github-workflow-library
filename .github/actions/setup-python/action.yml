@@ -14,10 +14,10 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@<COMMIT_SHA>
+    - uses: actions/checkout@v4
 
     - name: Install uv
-      uses: astral-sh/setup-uv@<COMMIT_SHA>
+      uses: astral-sh/setup-uv@v4
       with:
         enable-cache: true
 
@@ -26,7 +26,7 @@ runs:
 
     - name: Cache uv
       id: cache
-      uses: actions/cache@<COMMIT_SHA>
+      uses: actions/cache@v4
       with:
         path: ~/.cache/uv
         key: uv-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('**/pyproject.toml', '**/uv.lock') }}

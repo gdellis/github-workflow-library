@@ -14,13 +14,13 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@<COMMIT_SHA>
+    - uses: actions/checkout@v4
 
     - name: Setup pnpm
-      uses: pnpm/action-setup@<COMMIT_SHA>
+      uses: pnpm/action-setup@v4
 
     - name: Use Node.js ${{ inputs.node-version }}
-      uses: actions/setup-node@<COMMIT_SHA>
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
         cache: 'pnpm'
@@ -32,7 +32,7 @@ runs:
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
     - name: Setup pnpm cache
-      uses: actions/cache@<COMMIT_SHA>
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
         key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
