@@ -20,12 +20,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@<COMMIT_SHA>
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@<COMMIT_SHA>
+        uses: astral-sh/setup-uv@v4
 
       - name: Install Python
         run: uv python install 3.13
@@ -45,13 +45,13 @@ jobs:
 
       - name: Upload artifacts
         if: inputs.artifacts != ''
-        uses: actions/upload-artifact@<COMMIT_SHA>
+        uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
           path: ${{ inputs.artifacts }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@<COMMIT_SHA>
+        uses: softprops/action-gh-release@v4
         with:
           tag_name: v${{ steps.version.outputs.version }}
           generate_release_notes: true

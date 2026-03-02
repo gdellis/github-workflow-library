@@ -12,7 +12,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@<COMMIT_SHA>
+    - uses: actions/checkout@v4
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
 
@@ -25,7 +25,7 @@ runs:
 
     - name: Restore pip cache
       if: inputs.python-version != ''
-      uses: actions/cache@<COMMIT_SHA>
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pip-cache.outputs.output }}
         key: pip-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('**/pyproject.toml', '**/uv.lock') }}
