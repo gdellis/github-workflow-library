@@ -66,27 +66,32 @@ Copy templates from `.github/templates/` to your project's `.github/workflows/`.
 ## Available Workflows
 
 ### CI
+
 - `ci/ci-basic.yml` - Lint, typecheck, and test
 - `ci/ci-extended.yml` - Basic + coverage reporting
 - `ci/ci-legacy.yml` - Multi-version matrix testing
 
 ### CD
+
 - `cd/cd-release.yml` - GitHub Releases with Commitizen
 - `cd/cd-npm.yml` - NPM package publishing
 - `cd/cd-pypi.yml` - PyPI package publishing
 - `cd/cd-docker.yml` - Docker image building and publishing
 
 ### Security
+
 - `security/secret-scanning.yml` - GitHub Advanced Security secret scanning
 - `security/dependency-review.yml` - Dependency vulnerability review
 - `security/code-scanning.yml` - CodeQL analysis
 
 ### Quality
+
 - `quality/label-pr.yml` - Auto-label PRs based on changed files
 - `quality/welcome.yml` - Welcome new contributors
 - `quality/stale.yml` - Close stale issues and PRs
 
 ### Pull Request
+
 - `pull-request/pr-checks.yml` - Required PR checks
 - `pull-request/pr-title-format.yml` - Enforce conventional commit titles
 
@@ -95,6 +100,7 @@ Copy templates from `.github/templates/` to your project's `.github/workflows/`.
 ### Actionlint
 
 Run actionlint to validate workflows:
+
 ```bash
 actionlint -config .github/configs/actionlint.yaml .github/workflows/
 ```
@@ -102,6 +108,7 @@ actionlint -config .github/configs/actionlint.yaml .github/workflows/
 ### Shellcheck
 
 Validate shell scripts:
+
 ```bash
 shellcheck .github/scripts/*.sh
 ```

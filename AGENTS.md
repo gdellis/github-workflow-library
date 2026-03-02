@@ -8,7 +8,7 @@ This library provides CI/CD, security, and quality assurance workflows that can 
 
 ## Directory Structure
 
-```
+```tree
 .github/
 ├── workflows/           # Reusable workflows (call via workflow_call)
 │   ├── ci/             # CI workflows (lint, typecheck, test)
