@@ -16,3 +16,4 @@ jobs:
       - uses: ./.github/actions/pr-agent
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

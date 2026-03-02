@@ -120,6 +120,7 @@ jobs:
       - uses: ./.github/actions/pr-agent
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 **With custom model:**
@@ -131,6 +132,7 @@ steps:
       model: "ollama-cloud/llama3:70b"
     env:
       OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 **With custom prompt:**
@@ -140,6 +142,7 @@ steps:
   - uses: ./.github/actions/pr-agent
     env:
       OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PR_AGENT_PROMPT: "Your custom prompt here..."
 ```
 
