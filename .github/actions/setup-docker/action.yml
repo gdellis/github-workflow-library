@@ -1,0 +1,38 @@
+name: Setup Docker
+description: Setup Docker with BuildKit caching
+
+inputs:
+  docker-version:
+    type: string
+    default: 'latest'
+
+outputs:
+  cache-hit:
+    description: Whether buildx cache was restored
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@<COMMIT_SHA>
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@<COMMIT_SHA>
+      with:
+        images: ${{ inputs.image-name }}
+        tags: type=sha,type=ref
+
+    - name: Export Docker Buildx digest
+      id: build
+      uses: docker/build-push-action@<COMMIT_SHA>
+      with:
+        context: .
+        load: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

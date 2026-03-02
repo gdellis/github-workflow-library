@@ -1,0 +1,33 @@
+name: Checkout with caching
+description: Checkout repository with optional pip/uv cache restoration
+
+inputs:
+  fetch-depth:
+    type: string
+    default: '1'
+  python-version:
+    type: string
+    default: '3.13'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Get pip cache dir
+      if: inputs.python-version != ''
+      shell: bash
+      id: pip-cache
+      run: |
+        python -m pip cache dir | tee -a $GITHUB_OUTPUT
+
+    - name: Restore pip cache
+      if: inputs.python-version != ''
+      uses: actions/cache@<COMMIT_SHA>
+      with:
+        path: ${{ steps.pip-cache.outputs.output }}
+        key: pip-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('**/pyproject.toml', '**/uv.lock') }}
+        restore-keys: |
+          pip-${{ runner.os }}-${{ inputs.python-version }}-

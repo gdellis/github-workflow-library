@@ -1,0 +1,43 @@
+name: Reusable Test Workflow
+description: Run tests with coverage support
+
+inputs:
+  runs-on:
+    type: string
+    default: ubuntu-latest
+  test-command:
+    type: string
+    required: true
+  coverage-command:
+    type: string
+    default: ''
+  python-version:
+    type: string
+    default: '3.13'
+  cache-key:
+    type: string
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+
+    - name: Setup Python
+      uses: ./.github/actions/setup-python
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install dependencies
+      if: inputs.cache-key != ''
+      shell: bash
+      run: uv sync --frozen
+
+    - name: Test
+      shell: bash
+      run: ${{ inputs.test-command }}
+
+    - name: Coverage
+      if: inputs.coverage-command != ''
+      shell: bash
+      run: ${{ inputs.coverage-command }}

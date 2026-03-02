@@ -1,0 +1,59 @@
+name: CD Release
+description: Publish release to GitHub Releases
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        type: string
+        default: 'major'
+        description: Release type (major, minor, patch)
+      artifacts:
+        type: string
+        default: ''
+        description: Glob pattern for artifacts to upload
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Install Python
+        run: uv python install 3.13
+
+      - name: Install commitizen
+        run: uv pip install commitizen
+
+      - name: Bump version
+        run: |
+          cz bump --yes --changelog
+
+      - name: Get new version
+        id: version
+        run: |
+          VERSION=$(cz version --template '{version}')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        if: inputs.artifacts != ''
+        uses: actions/upload-artifact@<COMMIT_SHA>
+        with:
+          name: release-artifacts
+          path: ${{ inputs.artifacts }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@<COMMIT_SHA>
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

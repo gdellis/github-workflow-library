@@ -1,0 +1,82 @@
+name: CI Extended
+description: Extended CI workflow with coverage reporting
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        type: string
+        default: '3.13'
+      lint-command:
+        type: string
+        default: 'uv run ruff check .'
+      typecheck-command:
+        type: string
+        default: 'uv run ty check .'
+      test-command:
+        type: string
+        default: 'uv run pytest -q --cov=. --cov-report=xml'
+      coverage-command:
+        type: string
+        default: 'uv run coverage report --fail-under=80'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install ${{ inputs.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --frozen --no-dev
+
+      - name: Lint
+        run: ${{ inputs.lint-command }}
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install ${{ inputs.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --frozen --no-dev
+
+      - name: Typecheck
+        run: ${{ inputs.typecheck-command }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install ${{ inputs.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Test
+        run: ${{ inputs.test-command }}
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@<COMMIT_SHA>
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false

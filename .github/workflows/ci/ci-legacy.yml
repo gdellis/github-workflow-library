@@ -1,0 +1,77 @@
+name: CI Legacy
+description: CI for legacy or monorepo projects with matrix builds
+
+on:
+  workflow_call:
+    inputs:
+      python-versions:
+        type: string
+        default: '["3.11", "3.12", "3.13"]'
+      lint-command:
+        type: string
+        default: 'uv run ruff check .'
+      typecheck-command:
+        type: string
+        default: 'uv run ty check .'
+      test-command:
+        type: string
+        default: 'uv run pytest -q'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --frozen --no-dev
+
+      - name: Lint
+        run: ${{ inputs.lint-command }}
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --frozen --no-dev
+
+      - name: Typecheck
+        run: ${{ inputs.typecheck-command }}
+
+  test:
+    name: Test (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(inputs.python-versions) }}
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Test
+        run: ${{ inputs.test-command }}

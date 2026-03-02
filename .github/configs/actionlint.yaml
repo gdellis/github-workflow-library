@@ -1,0 +1,12 @@
+---
+warnings:
+  - ".github/workflows/*.yml::expr"
+  - ".github/workflows/*.yml::runner::label"
+  - ".github/workflows/*.yml::runner::env"
+  - ".github/workflows/*.yml::job::env"
+settings:
+  colored: true
+  pipeline:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true

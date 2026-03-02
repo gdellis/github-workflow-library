@@ -1,0 +1,26 @@
+name: Label PR
+description: Auto-label pull requests based on files changed
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  label-pr:
+    name: Label PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+        with:
+          sparse-checkout: |
+             .github/.pr-labels.yaml
+          sparse-checkout-cone-mode: false
+
+      - name: Label PR
+        uses: actions/labeler@<COMMIT_SHA>
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/.pr-labels.yaml

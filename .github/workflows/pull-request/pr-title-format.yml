@@ -1,0 +1,33 @@
+name: PR Title Format
+description: Enforce PR title format using conventional commits
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+jobs:
+  pr-title-format:
+    name: PR Title Format
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@<COMMIT_SHA>
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false

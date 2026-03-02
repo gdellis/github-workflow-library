@@ -1,0 +1,28 @@
+name: Audit Dependencies
+description: Audit dependencies for vulnerabilities
+
+inputs:
+  python-version:
+    type: string
+    default: '3.13'
+  audit-command:
+    type: string
+    default: 'uv run pip-audit'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+    - name: Set up Python
+      run: uv python install ${{ inputs.python-version }}
+
+    - name: Install dependencies
+      run: uv sync --frozen --no-dev
+
+    - name: Audit dependencies
+      shell: bash
+      run: ${{ inputs.audit-command }}

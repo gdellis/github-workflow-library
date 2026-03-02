@@ -1,0 +1,40 @@
+name: Setup Node.js
+description: Setup Node.js with pnpm and caching
+
+inputs:
+  node-version:
+    type: string
+    default: '22'
+
+outputs:
+  cache-hit:
+    description: Whether cache was restored
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@<COMMIT_SHA>
+
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@<COMMIT_SHA>
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'pnpm'
+
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+    - name: Setup pnpm cache
+      uses: actions/cache@<COMMIT_SHA>
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          pnpm-${{ runner.os }}-

@@ -1,0 +1,21 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
+      - any-glob-to-any-file: 'Makefile'
+      - any-glob-to-any-file: 'tox.ini'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: 'docs/**'
+      - any-glob-to-any-file: '*.md'
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file: 'tests/**'
+      - any-glob-to-any-file: '*_test.py'
+      - any-glob-to-any-file: 'test_*.py'
+
+feature:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+      - any-glob-to-any-file: 'lib/**'

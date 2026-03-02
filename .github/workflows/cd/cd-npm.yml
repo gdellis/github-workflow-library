@@ -1,0 +1,47 @@
+name: CD NPM
+description: Publish package to NPM
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '22'
+      registry:
+        type: string
+        default: 'https://registry.npmjs.org/'
+    secrets:
+      NPM_TOKEN:
+        required: true
+        description: NPM authentication token
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@<COMMIT_SHA>
+
+      - name: Use Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@<COMMIT_SHA>
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish to NPM
+        uses: pnpm/publish-to-npm@<COMMIT_SHA>
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          registry: ${{ inputs.registry }}

@@ -1,0 +1,43 @@
+name: CD PyPI
+description: Publish package to PyPI
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        type: string
+        default: '3.13'
+      package-dir:
+        type: string
+        default: '.'
+    secrets:
+      PYPI_TOKEN:
+        required: true
+        description: PyPI authentication token
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@<COMMIT_SHA>
+
+      - name: Set up Python
+        run: uv python install ${{ inputs.python-version }}
+
+      - name: Install build
+        run: uv pip install build
+
+      - name: Build package
+        run: python -m build ${{ inputs.package-dir }}
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@<COMMIT_SHA>
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}

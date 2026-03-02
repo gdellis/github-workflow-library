@@ -1,0 +1,39 @@
+name: Reusable Lint Workflow
+description: Run linting with caching support
+
+inputs:
+  runs-on:
+    type: string
+    default: ubuntu-latest
+  lint-command:
+    type: string
+    required: true
+  cache-key:
+    type: string
+    default: ''
+  cache-path:
+    type: string
+    default: ''
+  python-version:
+    type: string
+    default: '3.13'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@<COMMIT_SHA>
+
+    - name: Setup Python
+      if: inputs.cache-key != ''
+      uses: ./.github/actions/setup-python
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install dependencies
+      if: inputs.cache-key != ''
+      shell: bash
+      run: uv sync --frozen --no-dev
+
+    - name: Lint
+      shell: bash
+      run: ${{ inputs.lint-command }}

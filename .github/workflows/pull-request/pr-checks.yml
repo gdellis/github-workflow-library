@@ -1,0 +1,25 @@
+name: PR Checks
+description: Required checks for pull requests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  required-checks:
+    name: Required Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check PR has title
+        run: |
+          if [ -z "${{ github.event.pull_request.title }}" ]; then
+            echo "Error: PR title is empty"
+            exit 1
+          fi
+
+      - name: Check PR has description
+        if: github.event.pull_request.body == ''
+        run: |
+          echo "Warning: PR description is empty"

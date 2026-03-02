@@ -1,0 +1,32 @@
+name: Code Scanning
+description: Run code scanning with CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@<COMMIT_SHA>
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@<COMMIT_SHA>
+        with:
+          languages: python
+          queries: security-extended
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@<COMMIT_SHA>
+        with:
+          category: "/language:python"
