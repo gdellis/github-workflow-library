@@ -4,7 +4,7 @@ A collection of reusable GitHub Actions workflows, composite actions, and templa
 
 ## Directory Structure
 
-```
+```tree
 .github/
 ├── workflows/           # Reusable workflows
 │   ├── ci/             # CI workflows (lint, typecheck, test)
