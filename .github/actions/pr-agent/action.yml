@@ -26,9 +26,8 @@ runs:
       uses: anomalyco/opencode/github@latest
       env:
         OLLAMA_API_KEY: ${{ env.OLLAMA_API_KEY }}
-        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MODEL: ${{ inputs.model }}
-        CUSTOM_PROMPT: ${{ env.PR_AGENT_PROMPT }}
       with:
         model: ${{ inputs.model }}
         use_github_token: true
