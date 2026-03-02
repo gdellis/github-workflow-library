@@ -13,29 +13,6 @@ jobs:
       pull-requests: write
       issues: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate secrets
-        run: |
-          if [ -z "${{ secrets.OLLAMA_API_KEY }}" ]; then
-            echo "Error: OLLAMA_API_KEY secret is not set or empty"
-            exit 1
-          fi
-
-      - uses: anomalyco/opencode/github@latest
+      - uses: ./.github/actions/pr-agent
         env:
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          model: "ollama-cloud/qwen3-coder:480b"
-          use_github_token: true
-          prompt: |
-            Review this pull request:
-            - Check for code quality issues
-            - Look for potential bugs / security issues.
-            - Suggest improvements
-            - Look for best practices like proper variable naming convention.
-            - Don't modify any files. Just provide review comments as detailed as possible.
-            - The review comments should highlight specific lines of code in the pull request.
-            - Add categories to each comment like [BUG], [IMPROVEMENT], [BEST PRACTICE], [SECURITY] and severity levels like [LOW], [MEDIUM], [HIGH]. Try to avoid unnecessary nitpicks unless they are important and hint towards a larger issue.
-            - If there are no issues, say "No issues found. Good job!"

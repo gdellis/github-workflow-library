@@ -99,6 +99,50 @@ Copy templates from `.github/templates/` to your project's `.github/workflows/`.
 - `pull-request/pr-checks.yml` - Required PR checks
 - `pull-request/pr-title-format.yml` - Enforce conventional commit titles
 
+## Available Actions
+
+### PR Agent
+
+AI-powered PR review using OpenCode. Located at `.github/actions/pr-agent/`.
+
+**Usage:**
+
+```yaml
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: ./.github/actions/pr-agent
+        env:
+          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+```
+
+**With custom model:**
+
+```yaml
+steps:
+  - uses: ./.github/actions/pr-agent
+    with:
+      model: "ollama-cloud/llama3:70b"
+    env:
+      OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+```
+
+**With custom prompt:**
+
+```yaml
+steps:
+  - uses: ./.github/actions/pr-agent
+    env:
+      OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+      PR_AGENT_PROMPT: "Your custom prompt here..."
+```
+
 ## Configuration
 
 ### Actionlint

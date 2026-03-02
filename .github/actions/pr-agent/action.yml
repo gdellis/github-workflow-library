@@ -1,0 +1,55 @@
+name: PR Agent
+description: AI-powered PR review using OpenCode
+
+inputs:
+  model:
+    type: string
+    default: 'ollama-cloud/qwen3-coder:480b'
+    description: Model to use for review
+
+env:
+  PR_AGENT_PROMPT:
+    description: Custom prompt (overrides default if set)
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Validate secrets
+      shell: bash
+      run: |
+        if [ -z "${{ env.OLLAMA_API_KEY }}" ]; then
+          echo "Error: OLLAMA_API_KEY environment variable is not set"
+          exit 1
+        fi
+
+    - name: Run PR Review
+      uses: anomalyco/opencode/github@latest
+      env:
+        OLLAMA_API_KEY: ${{ env.OLLAMA_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MODEL: ${{ inputs.model }}
+        CUSTOM_PROMPT: ${{ env.PR_AGENT_PROMPT }}
+      shell: bash
+      run: |
+        # Set default prompt
+        DEFAULT_PROMPT="Review this pull request:
+        - Check for code quality issues
+        - Look for potential bugs / security issues
+        - Suggest improvements
+        - Look for best practices like proper variable naming convention
+        - Don't modify any files. Just provide review comments as detailed as possible
+        - The review comments should highlight specific lines of code in the pull request
+        - Add categories to each comment like [BUG], [IMPROVEMENT], [BEST PRACTICE], [SECURITY] and severity levels like [LOW], [MEDIUM], [HIGH]. Try to avoid unnecessary nitpicks unless they are important and hint towards a larger issue
+        - If there are no issues, say 'No issues found. Good job!'"
+
+        # Use custom prompt if provided, otherwise use default
+        if [ -n "$CUSTOM_PROMPT" ]; then
+          export PROMPT="$CUSTOM_PROMPT"
+        else
+          export PROMPT="$DEFAULT_PROMPT"
+        fi
+
+        opencode github --model "$MODEL" --prompt "$PROMPT"
