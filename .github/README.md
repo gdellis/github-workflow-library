@@ -63,6 +63,10 @@ steps:
 
 Copy templates from `.github/templates/` to your project's `.github/workflows/`.
 
+- `ci.yml.tpl` - Simple CI workflow template
+- `full-ci-cd.yml.tpl` - Full CI/CD workflow template
+- `pr_agent.yml.tpl` - AI-powered PR review using OpenCode
+
 ## Available Workflows
 
 ### CI
